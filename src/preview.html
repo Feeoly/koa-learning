@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <style>
+            html, body{
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="sendReq()">send</button>
+        <span id="result-a"></span>
+        <div id="result-b"></div>
+        <iframe src="http://localhost:3000/Form" id="preview-iframe" width="100%" height="80%"></iframe>
+    </body>
+    <script>
+        // (function getData() {
+        //     const url = 'http://localhost:3000/Form';
+        //     xhrBase('GET', url, null, function(xhr) {
+        //         const el = document.querySelector('#result-b')
+        //         el.innerHTML = xhr.responseText
+        //     })
+        // })()
+        function sendReq() {
+            console.log('request---')
+            const url = 'http://localhost:3000/postForm';
+            let params = 'say=hi&to=binny';
+            xhrBase('POST', url, params, function(){
+                const el = document.querySelector('#result-a')
+                el.innerHTML = 'success!'
+            })
+        }
+        function xhrBase(method, url, params, successCb) {
+            const xhr = new XMLHttpRequest()
+            xhr.open(method, url)
+
+            //Send the proper header information along with the request
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {//Call a function when the state changes.
+                if(xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText);
+                    if(typeof successCb === 'function'){
+                        successCb(xhr)
+                    }
+                } else {
+                    console.log(xhr)
+                }
+            }
+            xhr.send(params)
+        }
+    </script>
+</html>
